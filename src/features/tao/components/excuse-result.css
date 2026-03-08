@@ -1,0 +1,51 @@
+.excuse-result {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Neon accent glow on left edge */
+.excuse-result::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(
+    180deg,
+    var(--color-accent) 0%,
+    var(--color-accent-secondary, #a855f7) 100%
+  );
+  border-radius: var(--radius-pill);
+}
+
+.excuse-result--empty {
+  border-style: dashed;
+}
+
+.excuse-result--empty::before {
+  display: none;
+}
+
+.excuse-result__placeholder {
+  margin: 0;
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+.excuse-result__text {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  font-style: normal;
+}

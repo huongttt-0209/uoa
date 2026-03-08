@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UOA — Design Directions</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-elevated: #1a1a2e;
+      --accent-primary: #7c3aed;
+      --accent-secondary: #06b6d4;
+      --accent-glow: rgba(124, 58, 237, 0.3);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --critical: #dc2626;
+      --text-primary: #f0f0f0;
+      --text-secondary: #a0a0a0;
+      --text-muted: #6b7280;
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-blur: 16px;
+      --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-pill: 999px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* === DIRECTION SELECTOR === */
+    .direction-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 12px 16px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+    }
+
+    .direction-nav button {
+      flex-shrink: 0;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s var(--ease-smooth);
+    }
+
+    .direction-nav button.active {
+      background: var(--accent-primary);
+      color: white;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .direction-nav button:hover:not(.active) {
+      border-color: var(--accent-primary);
+      color: var(--text-primary);
+    }
+
+    /* === MOCKUP CONTAINER === */
+    .mockup-container {
+      max-width: 414px;
+      margin: 0 auto;
+      padding-top: 60px;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .mockup {
+      display: none;
+    }
+
+    .mockup.active {
+      display: block;
+    }
+
+    /* === DIRECTION 1: Classic Dark Glassmorphism === */
+    .d1-header {
+      padding: 20px 16px 12px;
+      text-align: center;
+    }
+
+    .d1-header h1 {
+      font-family: 'Space Grotesk';
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .d1-header .subtitle {
+      color: var(--text-secondary);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .d1-tabs {
+      display: flex;
+      margin: 0 16px;
+      border-radius: var(--radius-md);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      overflow: hidden;
+    }
+
+    .d1-tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s var(--ease-smooth);
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+    }
+
+    .d1-tab.active {
+      background: var(--accent-primary);
+      color: white;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .d1-card {
+      margin: 16px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .d1-select {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 14px;
+      margin-bottom: 12px;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    /* === SituationPicker (Redesigned Dropdown) === */
+    .picker-group {
+      margin-bottom: 14px;
+    }
+
+    .picker-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 6px;
+      padding-left: 4px;
+    }
+
+    .picker-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      background: var(--glass-bg);
+      border: 1px solid var(--accent-primary);
+      border-radius: var(--radius-pill);
+      color: var(--text-primary);
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s var(--ease-smooth);
+      position: relative;
+    }
+
+    .picker-btn:hover,
+    .picker-btn:focus {
+      box-shadow: 0 0 16px var(--accent-glow);
+      border-color: var(--accent-primary);
+      outline: none;
+    }
+
+    .picker-btn .picker-emoji {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .picker-btn .picker-text {
+      flex: 1;
+      text-align: left;
+    }
+
+    .picker-btn .picker-chevron {
+      font-size: 12px;
+      color: var(--accent-primary);
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+
+    .picker-btn.open .picker-chevron {
+      transform: rotate(180deg);
+    }
+
+    .picker-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: var(--bg-elevated);
+      backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .picker-dropdown.show {
+      display: block;
+    }
+
+    .picker-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+
+    .picker-option:hover {
+      background: rgba(124, 58, 237, 0.15);
+      color: var(--text-primary);
+    }
+
+    .picker-option .picker-emoji {
+      font-size: 18px;
+    }
+
+    .d1-slider-container {
+      margin: 24px 0;
+    }
+
+    .d1-slider-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .d1-slider {
+      width: 100%;
+      height: 6px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: linear-gradient(to right, var(--success), var(--warning), var(--danger), var(--critical));
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .d1-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      border: 3px solid white;
+      cursor: grab;
+      box-shadow: 0 0 15px var(--accent-glow);
+      transition: transform 0.2s var(--ease-bounce);
+    }
+
+    .d1-slider::-webkit-slider-thumb:active {
+      transform: scale(1.2);
+      cursor: grabbing;
+    }
+
+    .d1-emoji-display {
+      text-align: center;
+      font-size: 40px;
+      margin: 16px 0;
+      transition: all 0.3s var(--ease-bounce);
+    }
+
+    .d1-result {
+      margin: 16px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+    }
+
+    .d1-result-text {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      min-height: 60px;
+    }
+
+    .d1-copy-btn {
+      display: block;
+      width: calc(100% - 32px);
+      margin: 12px 16px;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      background: var(--accent-primary);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s var(--ease-smooth);
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+
+    .d1-copy-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px var(--accent-glow);
+    }
+
+    .d1-copy-btn:active {
+      transform: translateY(0);
+    }
+
+    /* === DIRECTION 2: Neon Cyberpunk === */
+    .d2-header {
+      padding: 20px 16px 12px;
+      text-align: center;
+    }
+
+    .d2-header h1 {
+      font-family: 'Space Grotesk';
+      font-size: 32px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #f0abfc, #7c3aed, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+    }
+
+    .d2-card {
+      margin: 16px;
+      background: rgba(124, 58, 237, 0.08);
+      border: 1px solid rgba(124, 58, 237, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .d2-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
+      animation: d2pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes d2pulse {
+
+      0%,
+      100% {
+        opacity: 0.3;
+      }
+
+      50% {
+        opacity: 0.8;
+      }
+    }
+
+    /* === DIRECTION 3: Minimal Clean === */
+    .d3-header {
+      padding: 24px 16px 16px;
+    }
+
+    .d3-header h1 {
+      font-family: 'Space Grotesk';
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .d3-card {
+      margin: 16px;
+      padding: 24px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .d3-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.06);
+      margin: 16px;
+    }
+
+    /* === DIRECTION 4: SOI Tab (BS Gauge) === */
+    .d4-gauge-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 16px;
+    }
+
+    .d4-gauge {
+      width: 220px;
+      height: 120px;
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .d4-gauge-bg {
+      width: 220px;
+      height: 110px;
+      border-radius: 110px 110px 0 0;
+      background: conic-gradient(from 180deg at 50% 100%, var(--success) 0deg, var(--warning) 90deg, var(--danger) 150deg, var(--critical) 180deg);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .d4-gauge-inner {
+      position: absolute;
+      bottom: 0;
+      left: 10px;
+      right: 10px;
+      height: 100px;
+      border-radius: 100px 100px 0 0;
+      background: var(--bg-primary);
+    }
+
+    .d4-score {
+      font-family: 'Space Grotesk';
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--danger);
+      text-align: center;
+    }
+
+    .d4-verdict {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: var(--radius-pill);
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: var(--danger);
+      font-weight: 600;
+      font-size: 16px;
+      margin-top: 8px;
+    }
+
+    .d4-breakdown {
+      margin: 20px 16px;
+      padding: 16px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+    }
+
+    .d4-breakdown-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .d4-breakdown-item:last-child {
+      border-bottom: none;
+    }
+
+    /* === TAB BAR (shared) === */
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 414px;
+      display: flex;
+      background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--glass-border);
+      padding: 8px 0 calc(8px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .tab-bar-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: color 0.2s;
+    }
+
+    .tab-bar-item.active {
+      color: var(--accent-primary);
+    }
+
+    .tab-bar-item .icon {
+      font-size: 20px;
+    }
+
+    /* === Info Panel === */
+    .info-panel {
+      margin: 16px;
+      padding: 16px;
+      background: rgba(124, 58, 237, 0.08);
+      border: 1px solid rgba(124, 58, 237, 0.2);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .info-panel strong {
+      color: var(--accent-primary);
+    }
+
+    .spacer {
+      height: 80px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="direction-nav">
+    <button class="active" onclick="showDirection(1)">🌙 D1: Glassmorphism</button>
+    <button onclick="showDirection(2)">⚡ D2: Neon Cyber</button>
+    <button onclick="showDirection(3)">✨ D3: Minimal</button>
+    <button onclick="showDirection(4)">📊 D4: SOI View</button>
+    <button onclick="showDirection(5)">🎚️ D5: Slider Focus</button>
+    <button onclick="showDirection(6)">📱 D6: Full Flow</button>
+  </nav>
+
+  <!-- === D1: Classic Dark Glassmorphism (TẠO tab) === -->
+  <div class="mockup-container">
+    <div class="mockup active" id="d1">
+      <div class="d1-header">
+        <h1>🎭 UOA</h1>
+        <div class="subtitle">Excuse Generator & BS Detector</div>
+      </div>
+
+      <div class="d1-tabs">
+        <button class="d1-tab active">✨ TẠO</button>
+        <button class="d1-tab">🔍 SOI</button>
+      </div>
+
+      <div class="d1-card">
+        <div class="picker-group">
+          <div class="picker-label">Tình huống</div>
+          <button class="picker-btn" onclick="togglePicker(this)">
+            <span class="picker-emoji">📚</span>
+            <span class="picker-text">Nghỉ học / nghỉ làm</span>
+            <span class="picker-chevron">▾</span>
+            <div class="picker-dropdown">
+              <button class="picker-option" onclick="selectPicker(event,'📚','Nghỉ học / nghỉ làm')"><span
+                  class="picker-emoji">📚</span> Nghỉ học / nghỉ làm</button>
+              <button class="picker-option" onclick="selectPicker(event,'🍽️','Cancel hẹn ăn')"><span
+                  class="picker-emoji">🍽️</span> Cancel hẹn ăn</button>
+              <button class="picker-option" onclick="selectPicker(event,'💬','Trả lời tin nhắn muộn')"><span
+                  class="picker-emoji">💬</span> Trả lời tin nhắn muộn</button>
+            </div>
+          </button>
+        </div>
+        <div class="picker-group">
+          <div class="picker-label">Nói với</div>
+          <button class="picker-btn" onclick="togglePicker(this)">
+            <span class="picker-emoji">👔</span>
+            <span class="picker-text">Sếp / Thầy cô</span>
+            <span class="picker-chevron">▾</span>
+            <div class="picker-dropdown">
+              <button class="picker-option" onclick="selectPicker(event,'👔','Sếp / Thầy cô')"><span
+                  class="picker-emoji">👔</span> Sếp / Thầy cô</button>
+              <button class="picker-option" onclick="selectPicker(event,'👫','Bạn bè')"><span
+                  class="picker-emoji">👫</span> Bạn bè</button>
+              <button class="picker-option" onclick="selectPicker(event,'❤️','Người yêu')"><span
+                  class="picker-emoji">❤️</span> Người yêu</button>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div class="d1-card">
+        <div class="d1-slider-container">
+          <div class="d1-slider-label"><span>😇 Thật thà</span><span>🐍 Bịa cứng</span></div>
+          <input type="range" class="d1-slider" min="0" max="4" value="2" id="toneSlider1">
+        </div>
+        <div class="d1-emoji-display" id="emojiDisplay1">😏</div>
+      </div>
+
+      <div class="d1-result">
+        <div class="d1-result-text" id="excuseText1">
+          "Dạ em xin phép nghỉ ngày mai ạ. Em hơi bị mệt, cơ thể cũng không được khỏe lắm nên muốn nghỉ ngơi một ngày.
+          Chiều em sẽ bổ sung giấy phép nghỉ ạ."
+        </div>
+      </div>
+
+      <button class="d1-copy-btn">📋 Copy lý do</button>
+
+      <div class="info-panel">
+        <strong>Direction 1: Classic Glassmorphism</strong><br>
+        Frosted glass effects, subtle glow accents, gradient slider track. Premium feel nhưng clean.
+      </div>
+      <div class="spacer"></div>
+
+      <div class="tab-bar">
+        <button class="tab-bar-item active"><span class="icon">✨</span>TẠO</button>
+        <button class="tab-bar-item"><span class="icon">🔍</span>SOI</button>
+      </div>
+    </div>
+
+    <!-- === D2: Neon Cyberpunk === -->
+    <div class="mockup" id="d2">
+      <div class="d2-header">
+        <h1>⚡ UOA</h1>
+        <div class="subtitle" style="color:var(--text-muted); font-size:13px; margin-top:4px;">Excuse Generator & BS
+          Detector</div>
+      </div>
+
+      <div class="d1-tabs" style="border-color:rgba(124,58,237,0.3);">
+        <button class="d1-tab active" style="background:linear-gradient(135deg,#7c3aed,#06b6d4);">✨ TẠO</button>
+        <button class="d1-tab">🔍 SOI</button>
+      </div>
+
+      <div class="d2-card">
+        <div class="picker-group" style="position:relative;z-index:2;">
+          <div class="picker-label" style="color:rgba(240,171,252,0.6);">Tình huống</div>
+          <button class="picker-btn" style="border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.12);"
+            onclick="togglePicker(this)">
+            <span class="picker-emoji">📚</span>
+            <span class="picker-text">Nghỉ học / nghỉ làm</span>
+            <span class="picker-chevron">▾</span>
+          </button>
+        </div>
+        <div class="picker-group" style="position:relative;z-index:1;">
+          <div class="picker-label" style="color:rgba(240,171,252,0.6);">Nói với</div>
+          <button class="picker-btn" style="border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.12);"
+            onclick="togglePicker(this)">
+            <span class="picker-emoji">👔</span>
+            <span class="picker-text">Sếp / Thầy cô</span>
+            <span class="picker-chevron">▾</span>
+          </button>
+        </div>
+        <div class="d1-slider-container">
+          <div class="d1-slider-label"><span>😇</span><span>🐍</span></div>
+          <input type="range" class="d1-slider" min="0" max="4" value="3"
+            style="background:linear-gradient(to right,#06b6d4,#7c3aed,#f0abfc);">
+        </div>
+        <div style="text-align:center;font-size:48px;margin:12px 0;">😈</div>
+      </div>
+
+      <div class="d2-card">
+        <div class="d1-result-text" style="position:relative;z-index:1;">
+          "Thưa anh/chị, em đang gặp triệu chứng nghiêm trọng của hội chứng mệt mỏi mãn tính, bác sĩ khuyến nghị em nên
+          nghỉ ngơi tuyệt đối..."
+        </div>
+      </div>
+
+      <button class="d1-copy-btn" style="background:linear-gradient(135deg,#7c3aed,#06b6d4);">⚡ Copy lý do</button>
+
+      <div class="info-panel" style="border-color:rgba(6,182,212,0.3);">
+        <strong style="color:#06b6d4;">Direction 2: Neon Cyberpunk</strong><br>
+        Gradient accents, pulsing glow, bolder color palette. Expressive and edgy.
+      </div>
+      <div class="spacer"></div>
+
+      <div class="tab-bar">
+        <button class="tab-bar-item active" style="color:#7c3aed;"><span class="icon">✨</span>TẠO</button>
+        <button class="tab-bar-item"><span class="icon">🔍</span>SOI</button>
+      </div>
+    </div>
+
+    <!-- === D3: Minimal Clean === -->
+    <div class="mockup" id="d3">
+      <div class="d3-header">
+        <h1>UOA</h1>
+        <p style="color:var(--text-muted);font-size:13px;margin-top:4px;">Excuse Generator & BS Detector</p>
+      </div>
+
+      <div style="display:flex;margin:0 16px;gap:1px;">
+        <button class="d1-tab active"
+          style="border-radius:var(--radius-sm) 0 0 var(--radius-sm);background:var(--text-primary);color:var(--bg-primary);">TẠO</button>
+        <button class="d1-tab"
+          style="border-radius:0 var(--radius-sm) var(--radius-sm) 0;background:var(--bg-secondary);">SOI</button>
+      </div>
+
+      <div class="d3-card">
+        <label style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;">Tình
+          huống</label>
+        <select class="d1-select" style="background:var(--bg-primary);margin-top:6px;">
+          <option>Nghỉ học / nghỉ làm</option>
+        </select>
+        <label style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;">Đối
+          tượng</label>
+        <select class="d1-select" style="background:var(--bg-primary);margin-top:6px;">
+          <option>Sếp / Thầy cô</option>
+        </select>
+      </div>
+
+      <div class="d3-divider"></div>
+
+      <div class="d3-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <span style="font-size:13px;color:var(--text-muted);">Tone</span>
+          <span style="font-size:20px;">😊</span>
+        </div>
+        <input type="range" class="d1-slider" min="0" max="4" value="1"
+          style="background:linear-gradient(to right,#333,#666);">
+      </div>
+
+      <div class="d3-card" style="border-left:3px solid var(--text-primary);">
+        <div class="d1-result-text">
+          "Em xin phép nghỉ một ngày vì không được khỏe ạ. Em sẽ hoàn thành bài tập và gửi lại thầy/cô sớm nhất có thể."
+        </div>
+      </div>
+
+      <button class="d1-copy-btn" style="background:var(--text-primary);color:var(--bg-primary);">Copy</button>
+
+      <div class="info-panel" style="background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08);">
+        <strong style="color:var(--text-primary);">Direction 3: Minimal Clean</strong><br>
+        Stripped-back aesthetic, monochrome palette, focus on content. Calmer, more tool-like feel.
+      </div>
+      <div class="spacer"></div>
+
+      <div class="tab-bar" style="border-top-color:rgba(255,255,255,0.06);">
+        <button class="tab-bar-item active" style="color:var(--text-primary);"><span class="icon">✨</span>TẠO</button>
+        <button class="tab-bar-item"><span class="icon">🔍</span>SOI</button>
+      </div>
+    </div>
+
+    <!-- === D4: SOI View with Gauge === -->
+    <div class="mockup" id="d4">
+      <div class="d1-header">
+        <h1 style="font-family:'Space Grotesk';">🔍 SOI</h1>
+      </div>
+
+      <div class="d1-tabs">
+        <button class="d1-tab">✨ TẠO</button>
+        <button class="d1-tab active">🔍 SOI</button>
+      </div>
+
+      <div class="d1-card">
+        <textarea
+          style="width:100%;min-height:80px;background:var(--bg-secondary);border:1px solid var(--glass-border);border-radius:var(--radius-sm);color:var(--text-primary);padding:12px;font-size:14px;resize:none;font-family:inherit;"
+          placeholder="Paste lý do cần soi vào đây...">"Em bị đau bụng dữ dội từ tối qua, phải đi bệnh viện cấp cứu, bác sĩ nói cần nghỉ 2 ngày..."</textarea>
+        <button class="d1-copy-btn" style="width:100%;margin:12px 0 0 0;">🔍 SOI NGAY</button>
+      </div>
+
+      <div class="d4-gauge-container">
+        <div class="d4-gauge">
+          <div class="d4-gauge-bg">
+            <div class="d4-gauge-inner"></div>
+          </div>
+        </div>
+        <div class="d4-score">87%</div>
+        <div class="d4-verdict">😈 Xạo thiệt!</div>
+      </div>
+
+      <div class="d4-breakdown">
+        <div class="d4-breakdown-item">🚩 "Đau bụng dữ dội" — quá dramatic, thiếu chi tiết cụ thể</div>
+        <div class="d4-breakdown-item">🚩 "Cấp cứu" — escalation không cần thiết</div>
+        <div class="d4-breakdown-item">🚩 "Nghỉ 2 ngày" — số ngày trùng weekend</div>
+        <div class="d4-breakdown-item">✅ Có mention bác sĩ — tăng credibility</div>
+      </div>
+
+      <button class="d1-copy-btn">📋 Copy kết quả SOI</button>
+
+      <div class="info-panel">
+        <strong>Direction 4: SOI Tab View</strong><br>
+        BS Gauge với speedometer visual, color-coded verdict badge, breakdown analysis. Dramatic reveal.
+      </div>
+      <div class="spacer"></div>
+
+      <div class="tab-bar">
+        <button class="tab-bar-item"><span class="icon">✨</span>TẠO</button>
+        <button class="tab-bar-item active"><span class="icon">🔍</span>SOI</button>
+      </div>
+    </div>
+
+    <!-- === D5: Slider Focus === -->
+    <div class="mockup" id="d5">
+      <div class="d1-header">
+        <h1 style="font-family:'Space Grotesk';">🎭 UOA</h1>
+      </div>
+
+      <div class="d1-tabs">
+        <button class="d1-tab active">✨ TẠO</button>
+        <button class="d1-tab">🔍 SOI</button>
+      </div>
+
+      <div
+        style="margin:16px;padding:32px 20px;background:var(--glass-bg);backdrop-filter:blur(16px);border:1px solid var(--glass-border);border-radius:var(--radius-lg);text-align:center;">
+        <div style="font-size:64px;margin-bottom:16px;" id="bigEmoji">😏</div>
+        <div style="font-family:'Space Grotesk';font-size:20px;font-weight:600;margin-bottom:4px;">Mức: Hơi phang</div>
+        <div style="color:var(--text-muted);font-size:13px;">Kéo slider để chỉnh tone</div>
+        <div style="margin:24px 0 8px;">
+          <input type="range" class="d1-slider" min="0" max="4" value="2" id="toneSlider5" style="height:8px;">
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:24px;margin-top:8px;">
+          <span>😇</span><span>😊</span><span>😏</span><span>😈</span><span>🐍</span>
+        </div>
+      </div>
+
+      <div style="margin:0 16px;display:flex;gap:8px;">
+        <button class="picker-btn" style="flex:1;padding:12px 14px;font-size:14px;" onclick="togglePicker(this)">
+          <span class="picker-emoji">📚</span>
+          <span class="picker-text">Nghỉ học</span>
+          <span class="picker-chevron">▾</span>
+        </button>
+        <button class="picker-btn" style="flex:1;padding:12px 14px;font-size:14px;" onclick="togglePicker(this)">
+          <span class="picker-emoji">👔</span>
+          <span class="picker-text">Sếp</span>
+          <span class="picker-chevron">▾</span>
+        </button>
+      </div>
+
+      <div class="d1-result" style="margin-top:12px;">
+        <div class="d1-result-text">"Dạ em bị đau đầu hơi nặng, chắc do thời tiết thay đổi. Em xin phép nghỉ buổi chiều
+          để đi khám ạ."</div>
+      </div>
+
+      <button class="d1-copy-btn">📋 Copy</button>
+
+      <div class="info-panel">
+        <strong>Direction 5: Slider-Centric</strong><br>
+        Slider là hero element lớn nhất trên screen. Emoji dominant. Touch-first design.
+      </div>
+      <div class="spacer"></div>
+
+      <div class="tab-bar">
+        <button class="tab-bar-item active"><span class="icon">✨</span>TẠO</button>
+        <button class="tab-bar-item"><span class="icon">🔍</span>SOI</button>
+      </div>
+    </div>
+
+    <!-- === D6: Full Flow Overview === -->
+    <div class="mockup" id="d6">
+      <div class="d1-header">
+        <h1 style="font-family:'Space Grotesk';">📱 Full User Flow</h1>
+        <div class="subtitle">TẠO → Copy → SOI → Share</div>
+      </div>
+
+      <div style="margin:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="d1-card" style="margin:0;text-align:center;">
+          <div style="font-size:28px;margin-bottom:8px;">1️⃣</div>
+          <div style="font-size:13px;font-weight:600;">Chọn tình huống</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Dropdown selection</div>
+        </div>
+        <div class="d1-card" style="margin:0;text-align:center;">
+          <div style="font-size:28px;margin-bottom:8px;">2️⃣</div>
+          <div style="font-size:13px;font-weight:600;">Kéo Tone Slider</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">😇→🐍 morphing</div>
+        </div>
+        <div class="d1-card" style="margin:0;text-align:center;">
+          <div style="font-size:28px;margin-bottom:8px;">3️⃣</div>
+          <div style="font-size:13px;font-weight:600;">Đọc & Copy</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">1-tap copy</div>
+        </div>
+        <div class="d1-card" style="margin:0;text-align:center;">
+          <div style="font-size:28px;margin-bottom:8px;">4️⃣</div>
+          <div style="font-size:13px;font-weight:600;">Share / SOI</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Viral loop</div>
+        </div>
+      </div>
+
+      <div
+        style="margin:16px;padding:16px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:var(--radius-md);">
+        <div style="font-size:14px;font-weight:600;color:var(--success);margin-bottom:8px;">✅ Key UX Metrics</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+          • TẠO: mở → copy ≤ <strong style="color:var(--text-primary);">5 giây</strong><br>
+          • SOI: paste → verdict ≤ <strong style="color:var(--text-primary);">10 giây</strong><br>
+          • Share rate: ≥ <strong style="color:var(--text-primary);">40%</strong><br>
+          • Slider response: < <strong style="color:var(--text-primary);">100ms</strong>
+        </div>
+      </div>
+
+      <div
+        style="margin:16px;padding:16px;background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:var(--radius-md);">
+        <div style="font-size:14px;font-weight:600;color:var(--accent-primary);margin-bottom:8px;">🎨 Design Tokens
+          Applied</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span
+            style="display:inline-block;width:24px;height:24px;border-radius:4px;background:#0a0a0f;border:1px solid var(--glass-border);"></span>
+          <span
+            style="display:inline-block;width:24px;height:24px;border-radius:4px;background:#12121a;border:1px solid var(--glass-border);"></span>
+          <span style="display:inline-block;width:24px;height:24px;border-radius:4px;background:#7c3aed;"></span>
+          <span style="display:inline-block;width:24px;height:24px;border-radius:4px;background:#06b6d4;"></span>
+          <span style="display:inline-block;width:24px;height:24px;border-radius:4px;background:#10b981;"></span>
+          <span style="display:inline-block;width:24px;height:24px;border-radius:4px;background:#f59e0b;"></span>
+          <span style="display:inline-block;width:24px;height:24px;border-radius:4px;background:#ef4444;"></span>
+          <span style="display:inline-block;width:24px;height:24px;border-radius:4px;background:#dc2626;"></span>
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <strong>Direction 6: Full Flow Overview</strong><br>
+        Tổng quan complete user flow, UX metrics, và design tokens. For reference and alignment.
+      </div>
+      <div class="spacer"></div>
+    </div>
+  </div>
+
+  <script>
+    const emojis = ['😇', '😊', '😏', '😈', '🐍'];
+    const excuses = [
+      '"Em không khỏe, xin phép nghỉ một buổi ạ. Em sẽ hoàn thành bài trước khi đi học lại."',
+      '"Em xin phép nghỉ ngày mai vì không được khỏe ạ. Em hơi bị cảm, cần nghỉ ngơi một ngày."',
+      '"Dạ em bị đau đầu hơi nặng, chắc do thời tiết thay đổi. Em xin phép nghỉ buổi chiều để đi khám ạ."',
+      '"Thưa anh/chị, em đang bị triệu chứng viêm dạ dày cấp. Bác sĩ đã kê đơn thuốc và khuyến nghị nghỉ 1-2 ngày..."',
+      '"Kính gửi quý thầy/cô, em đang nhập viện do phản ứng phụ nghiêm trọng với thuốc kháng sinh. Bác sĩ chuyên khoa yêu cầu theo dõi 48 giờ..."'
+    ];
+
+    function showDirection(n) {
+      document.querySelectorAll('.mockup').forEach(m => m.classList.remove('active'));
+      document.querySelectorAll('.direction-nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('d' + n).classList.add('active');
+      document.querySelectorAll('.direction-nav button')[n - 1].classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    // SituationPicker interactivity
+    function togglePicker(btn) {
+      const dropdown = btn.querySelector('.picker-dropdown');
+      if (!dropdown) return;
+      const isOpen = dropdown.classList.contains('show');
+      // Close all dropdowns first
+      document.querySelectorAll('.picker-dropdown').forEach(d => d.classList.remove('show'));
+      document.querySelectorAll('.picker-btn').forEach(b => b.classList.remove('open'));
+      if (!isOpen) {
+        dropdown.classList.add('show');
+        btn.classList.add('open');
+      }
+    }
+
+    function selectPicker(event, emoji, text) {
+      event.stopPropagation();
+      const btn = event.target.closest('.picker-btn');
+      btn.querySelector('.picker-emoji').textContent = emoji;
+      btn.querySelector('.picker-text').textContent = text;
+      btn.querySelector('.picker-dropdown').classList.remove('show');
+      btn.classList.remove('open');
+    }
+
+    // Close picker when clicking outside
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.picker-btn')) {
+        document.querySelectorAll('.picker-dropdown').forEach(d => d.classList.remove('show'));
+        document.querySelectorAll('.picker-btn').forEach(b => b.classList.remove('open'));
+      }
+    });
+
+    // Slider interactivity for D1
+    const slider1 = document.getElementById('toneSlider1');
+    if (slider1) {
+      slider1.addEventListener('input', function () {
+        document.getElementById('emojiDisplay1').textContent = emojis[this.value];
+        document.getElementById('excuseText1').textContent = excuses[this.value];
+      });
+    }
+
+    // Slider interactivity for D5
+    const slider5 = document.getElementById('toneSlider5');
+    if (slider5) {
+      slider5.addEventListener('input', function () {
+        document.getElementById('bigEmoji').textContent = emojis[this.value];
+      });
+    }
+  </script>
+</body>
+
+</html>

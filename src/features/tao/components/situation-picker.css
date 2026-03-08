@@ -1,0 +1,117 @@
+.situation-picker {
+  position: relative;
+  width: 100%;
+}
+
+.situation-picker__label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.situation-picker__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-pill);
+  color: var(--color-text);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: box-shadow var(--duration-fast) var(--ease-smooth);
+}
+
+.situation-picker__trigger:hover,
+.situation-picker__trigger:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-accent-glow);
+}
+
+.situation-picker__trigger--open {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-glow);
+}
+
+.situation-picker__selected {
+  flex: 1;
+  text-align: left;
+}
+
+.situation-picker__chevron {
+  margin-left: var(--space-sm);
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  transition: transform var(--duration-fast) var(--ease-smooth);
+}
+
+.situation-picker__trigger--open .situation-picker__chevron {
+  transform: rotate(180deg);
+}
+
+/* Backdrop removed — dimming is now handled by parent .tao-tab--dropdown-open */
+
+/* ── Dropdown — solid bg, elevated, escapes stacking context ── */
+.situation-picker__dropdown {
+  position: fixed;
+  z-index: 9999;
+  list-style: none;
+  padding: var(--space-xs) 0;
+  margin: 0;
+  background: #1a1a2e;
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: var(--radius-md);
+  max-height: 280px;
+  overflow-y: auto;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(124, 58, 237, 0.15),
+    0 0 20px rgba(124, 58, 237, 0.1);
+  animation: dropdown-in 0.15s var(--ease-smooth);
+  transform-origin: top center;
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: scaleY(0.9) translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+.situation-picker__option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-smooth);
+}
+
+.situation-picker__option:hover,
+.situation-picker__option--focused {
+  background: rgba(124, 58, 237, 0.15);
+}
+
+.situation-picker__option--selected {
+  color: var(--color-accent);
+  background: rgba(124, 58, 237, 0.08);
+}
+
+.situation-picker__option-emoji {
+  font-size: 1.25rem;
+}
+
+.situation-picker__option-label {
+  font-size: 1rem;
+}

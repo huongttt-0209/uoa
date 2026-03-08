@@ -1,0 +1,69 @@
+# generated: 2026-03-08
+# project: uoa
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Mark epic as 'in-progress' when starting work on its first story
+# - SM typically creates next story ONLY after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
+
+generated: 2026-03-08
+project: uoa
+project_key: NOKEY
+tracking_system: file-system
+story_location: "_bmad-output/implementation-artifacts"
+
+development_status:
+  # Epic 1: App Visual Identity & Design System
+  epic-1: done
+  1-1-project-scaffolding: done
+  1-2-design-tokens-dark-theme: done
+  1-3-shared-components-glasscard-toast: done
+  1-4-responsive-layout-shell: done
+  epic-1-retrospective: done
+
+  # Epic 2: TẠO — Excuse Generation Experience
+  epic-2: done
+  2-1-template-data-content-constants: done
+  2-2-situationpicker-recipientpicker-components: done
+  2-3-toneslider-with-emoji-feedback: done
+  2-4-excuse-generation-engine: done
+  2-5-copy-regenerate-actions: done
+  epic-2-retrospective: done
+
+  # Epic 3: SOI — BS Detection Experience
+  epic-3: done
+  3-1-bs-scoring-data-engine: done
+  3-2-text-input-with-validation: done
+  3-3-bs-gauge-visualization: done
+  3-4-verdict-badge-factor-breakdown: done
+  3-5-share-bs-result: done
+  epic-3-retrospective: done
+
+  # Epic 4: Navigation, Analytics & Launch
+  epic-4: done
+  4-1-tab-navigation-tabbar: done
+  4-2-analytics-integration: done
+  4-3-production-deploy: done
+  epic-4-retrospective: done

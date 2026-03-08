@@ -1,0 +1,58 @@
+.bs-gauge {
+  position: relative;
+  width: 200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.bs-gauge__svg {
+  width: 100%;
+  height: auto;
+}
+
+/* Animated arc fill */
+.bs-gauge__arc {
+  transition: stroke-dashoffset 1.5s var(--ease-smooth);
+}
+
+/* Needle sweep animation */
+.bs-gauge__needle {
+  transition: transform 1.5s var(--ease-smooth);
+}
+
+/* Score text centered below the arc */
+.bs-gauge__score {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Reduced motion: no animation, instant display */
+@media (prefers-reduced-motion: reduce) {
+  .bs-gauge__arc {
+    transition: none;
+  }
+
+  .bs-gauge__needle {
+    transition: none;
+  }
+
+  .bs-gauge {
+    animation: gauge-fade 0.3s ease-in-out;
+  }
+}
+
+@keyframes gauge-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

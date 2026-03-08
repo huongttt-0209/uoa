@@ -1,0 +1,83 @@
+.soi-tab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+.soi-tab__analyze-btn {
+  width: 100%;
+  padding: var(--space-md);
+  border: none;
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    135deg,
+    var(--accent-secondary),
+    var(--color-accent)
+  );
+  color: var(--color-bg);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    transform var(--duration-fast) var(--ease-smooth),
+    box-shadow var(--duration-fast) var(--ease-smooth);
+}
+
+.soi-tab__analyze-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px var(--accent-secondary);
+}
+
+.soi-tab__analyze-btn:active {
+  transform: translateY(0);
+}
+
+.soi-tab__analyze-btn:focus-visible {
+  outline: 2px solid var(--accent-secondary);
+  outline-offset: 2px;
+}
+
+.soi-tab__result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.soi-tab__share {
+  display: flex;
+  justify-content: center;
+}
+
+.soi-tab__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl) var(--space-md);
+  opacity: 0.5;
+}
+
+.soi-tab__empty-icon {
+  font-size: 3rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.soi-tab__empty-text {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}

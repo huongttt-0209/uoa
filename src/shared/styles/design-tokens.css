@@ -1,0 +1,45 @@
+/* ===========================================
+   Design Tokens — CSS Custom Properties
+   Source: UX Design Specification
+   =========================================== */
+
+:root {
+  /* ── Colors ── */
+  --color-bg: #0a0a0f;
+  --color-surface: rgba(255, 255, 255, 0.05);
+  --color-accent: #7c3aed;
+  --color-accent-glow: rgba(124, 58, 237, 0.3);
+  --accent-secondary: #a855f7;
+  --color-text: #f0f0f0;
+  --color-text-secondary: #a0a0a0;
+
+  /* ── Glass ── */
+  --color-glass-bg: rgba(255, 255, 255, 0.08);
+  --color-glass-border: rgba(255, 255, 255, 0.15);
+  --glass-blur: 16px;
+
+  /* ── Spacing ── */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* ── Radius ── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  /* ── Animation ── */
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-dramatic: 1500ms;
+
+  /* ── Layout ── */
+  --content-max: 414px;
+  --content-max-desktop: 600px;
+  --tab-bar-height: 64px;
+}
