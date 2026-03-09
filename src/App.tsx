@@ -18,7 +18,7 @@ export function App() {
       <main className="app__content">
         <header className="app-header">
           <h1 className="app-title">
-            Ú Òa
+            UOa
             <span className="app-title__sparkle">✦</span>
             <span className="app-title__sparkle">✧</span>
             <span className="app-title__sparkle">✦</span>

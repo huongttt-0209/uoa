@@ -43,7 +43,7 @@ describe('formatShareText', () => {
 
   it('includes app signature', () => {
     const text = formatShareText(mockResult);
-    expect(text).toContain('Analyzed by Ú Òa');
+    expect(text).toContain('Analyzed by UOa');
   });
 });
 

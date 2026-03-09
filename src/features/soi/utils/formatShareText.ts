@@ -14,6 +14,6 @@ export function formatShareText(result: BSResult): string {
     '',
     factorsSummary,
     '',
-    '— Analyzed by Ú Òa',
+    '— Analyzed by UOa',
   ].join('\n');
 }

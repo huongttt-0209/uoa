@@ -6,7 +6,7 @@ test.describe('TẠO Tab — Excuse Generator Flow', () => {
     });
 
     test('page loads with TẠO tab active and title visible', async ({ page }) => {
-        await expect(page.locator('h1')).toContainText('Ú Òa');
+        await expect(page.locator('h1')).toContainText('UOa');
         const taoTab = page.getByRole('tab', { name: /TẠO/i });
         await expect(taoTab).toHaveAttribute('aria-selected', 'true');
     });
