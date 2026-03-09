@@ -86,4 +86,32 @@ describe('EXCUSE_TEMPLATES', () => {
       expect(vnPattern.test(t.text)).toBe(true);
     }
   });
+
+  it('does not contain non-Vietnamese words (i18n guard)', () => {
+    const forbiddenWords = [
+      'porque',
+      'pero',
+      'también',
+      'the',
+      'and',
+      'but',
+      'because',
+      'with',
+      'from',
+      'this',
+      'that',
+      'have',
+      'sorry',
+      'please',
+      'thank',
+    ];
+    const pattern = new RegExp(`\\b(${forbiddenWords.join('|')})\\b`, 'gi');
+    for (const t of EXCUSE_TEMPLATES) {
+      const matches = t.text.match(pattern);
+      expect(
+        matches,
+        `Template "${t.id}" contains foreign word(s): ${matches}`,
+      ).toBeNull();
+    }
+  });
 });

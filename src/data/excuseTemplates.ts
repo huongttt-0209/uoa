@@ -271,7 +271,7 @@ export const EXCUSE_TEMPLATES: readonly ExcuseTemplate[] = [
     situationId: 'huy-hen',
     recipientId: 'ban-be',
     tone: 1,
-    text: 'Sorry tao hôm nay có việc, hẹn lần khác nhé.',
+    text: 'Xin lỗi tao hôm nay có việc, hẹn lần khác nhé.',
   },
   {
     id: 'hh-bb-2',
@@ -1059,7 +1059,7 @@ export const EXCUSE_TEMPLATES: readonly ExcuseTemplate[] = [
     situationId: 'huy-hen',
     recipientId: 'ban-be',
     tone: 2,
-    text: 'Tao nhỡ hứa bạn gái rồi, sorry nhé.',
+    text: 'Tao nhỡ hứa bạn gái rồi, xin lỗi nhé.',
   },
   {
     id: 'hh-bb-3b',

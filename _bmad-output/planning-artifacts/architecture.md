@@ -299,6 +299,31 @@ export function trackEvent(name: string, data?: Record<string, unknown>) {
 - Import from `shared/` only, never cross-feature
 - Use CSS Custom Properties from `design-tokens.css`
 
+### Known Gotchas
+
+#### GlassCard Stacking Context (`backdrop-filter` + Portals)
+
+**Problem:** `backdrop-filter: blur()` on `GlassCard` creates a new CSS stacking context. This means any portal-based overlay (dropdown, modal, popover) rendered inside a GlassCard cannot visually escape the GlassCard's stacking context, causing z-index conflicts.
+
+**Symptom:** Dropdowns from `SituationPicker` / `RecipientPicker` inside a `GlassCard` are clipped or appear behind sibling GlassCards.
+
+**Solution:** Propagate `isDropdownOpen` state from picker components to the parent, which applies a CSS class to sibling GlassCards to temporarily disable or adjust their `backdrop-filter`:
+
+```tsx
+// Parent propagates state
+<GlassCard className={isDropdownOpen ? 'glass-card--dropdown-peer' : ''}>
+  ...
+</GlassCard>
+```
+
+```css
+.glass-card--dropdown-peer {
+  backdrop-filter: none; /* or reduced blur */
+}
+```
+
+**Prevention:** When combining glassmorphism (`backdrop-filter`) with portals or overlays, always test overlay stacking behavior early. Consider rendering overlays outside the GlassCard's DOM tree using React portals to `document.body`.
+
 ## Project Structure & Boundaries
 
 ### Complete Project Directory

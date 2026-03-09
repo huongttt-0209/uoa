@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { usePersistedState } from '../../shared/hooks/usePersistedState';
 import { SITUATIONS } from '../../data/situations';
 import { RECIPIENTS } from '../../data/recipients';
 import type { ToneLevel } from '../../data/types';
@@ -20,9 +21,15 @@ import './tao-tab.css';
  *        → ExcuseResult + CopyButton + RegenerateButton
  */
 export function TaoTab() {
-  const [situationId, setSituationId] = useState(SITUATIONS[0].id);
-  const [recipientId, setRecipientId] = useState(RECIPIENTS[0].id);
-  const [tone, setTone] = useState<ToneLevel>(3);
+  const [situationId, setSituationId] = usePersistedState(
+    'uoa:situationId',
+    SITUATIONS[0].id,
+  );
+  const [recipientId, setRecipientId] = usePersistedState(
+    'uoa:recipientId',
+    RECIPIENTS[0].id,
+  );
+  const [tone, setTone] = usePersistedState<ToneLevel>('uoa:tone', 3);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
   const scrollTimeout = useTimeout();

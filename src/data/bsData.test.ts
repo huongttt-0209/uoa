@@ -40,6 +40,31 @@ describe('BS_KEYWORD_CATEGORIES', () => {
     const hasVietnamese = allKeywords.some((k) => vnPattern.test(k));
     expect(hasVietnamese).toBe(true);
   });
+
+  it('no keywords contain non-Vietnamese foreign words (i18n guard)', () => {
+    const forbiddenWords = [
+      'porque',
+      'pero',
+      'también',
+      'the',
+      'and',
+      'but',
+      'because',
+      'with',
+      'sorry',
+      'please',
+    ];
+    const pattern = new RegExp(`\\b(${forbiddenWords.join('|')})\\b`, 'gi');
+    for (const cat of BS_KEYWORD_CATEGORIES) {
+      for (const keyword of cat.keywords) {
+        const matches = keyword.match(pattern);
+        expect(
+          matches,
+          `Keyword "${keyword}" in "${cat.id}" contains foreign word(s): ${matches}`,
+        ).toBeNull();
+      }
+    }
+  });
 });
 
 describe('VERDICTS', () => {

@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { usePersistedState } from '../../shared/hooks/usePersistedState';
 import { GlassCard } from '../../shared/components/GlassCard';
 import { TextInput } from './components/TextInput';
 import { BSGauge } from './components/BSGauge';
@@ -17,7 +18,7 @@ const MIN_LENGTH = 10;
  * Wires: TextInput → useBSScorer (auto) → BSGauge + VerdictBadge + BSBreakdown + ShareButton
  */
 export function SoiTab() {
-  const [text, setText] = useState('');
+  const [text, setText] = usePersistedState('uoa:soiText', '');
   const result = useBSScorer(text);
   const lastTrackedRef = useRef<string | null>(null);
   const analyticsDebounce = useTimeout();

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { usePersistedState } from './shared/hooks/usePersistedState';
 import { TabBar, type TabId } from './shared/components/TabBar';
 import { TaoTab } from './features/tao/TaoTab';
 import { SoiTab } from './features/soi/SoiTab';
@@ -6,7 +6,10 @@ import { trackTabSwitch } from './shared/utils/analytics';
 import './App.css';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<TabId>('tao');
+  const [activeTab, setActiveTab] = usePersistedState<TabId>(
+    'uoa:activeTab',
+    'tao',
+  );
 
   function handleTabChange(tab: TabId) {
     setActiveTab(tab);

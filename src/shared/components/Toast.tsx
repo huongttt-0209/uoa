@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTimeout } from '../hooks/useTimeout';
 import './Toast.css';
 
 interface ToastProps {
@@ -10,15 +11,15 @@ interface ToastProps {
 const TOAST_DURATION_MS = 3000;
 
 export function Toast({ message, visible, onDismiss }: ToastProps) {
+  const timer = useTimeout();
+
   useEffect(() => {
     if (!visible) return;
 
-    const timer = setTimeout(() => {
-      onDismiss();
-    }, TOAST_DURATION_MS);
+    timer.set(onDismiss, TOAST_DURATION_MS);
 
-    return () => clearTimeout(timer);
-  }, [visible, onDismiss]);
+    return () => timer.clear();
+  }, [visible, onDismiss, timer]);
 
   return (
     <div

@@ -1,73 +1,63 @@
-# React + TypeScript + Vite
+# Ú Òa 🫣
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Vietnamese excuse generator & BS detector — a fun, mobile-first web app.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **TẠO (Create)** — Generate Vietnamese excuses by situation, recipient, and tone level
+- **SOI (Detect)** — Analyze text for BS indicators with a visual gauge and verdict
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- **React 19** + **TypeScript 5.9** — Type-safe component architecture
+- **Vite 7** (SWC) — Fast dev server & optimized builds
+- **Vanilla CSS** — Custom Properties design system, glassmorphism, dark theme
+- **Vitest** + React Testing Library — 194+ unit tests
+- **Vercel** — Production hosting with analytics
 
-## Expanding the ESLint configuration
+## Quick Start
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev       # Start dev server at localhost:5173
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Scripts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Command | Description |
+|---|---|
+| `npm run dev` | Start development server |
+| `npm run build` | TypeScript check + production build |
+| `npm test` | Run all unit tests |
+| `npm run test:watch` | Run tests in watch mode |
+| `npm run lint` | Run ESLint |
+| `npm run format` | Auto-format with Prettier |
+| `npm run format:check` | Check formatting |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project Structure
+
 ```
+src/
+├── features/
+│   ├── tao/          # TẠO — Excuse Generator
+│   └── soi/          # SOI — BS Detector
+├── shared/
+│   ├── components/   # TabBar, GlassCard, Toast
+│   ├── hooks/        # useTimeout
+│   ├── styles/       # Design tokens, globals, animations
+│   └── utils/        # Clipboard, analytics
+├── data/             # Templates, keywords, verdicts
+├── App.tsx           # Root component with tab navigation
+└── main.tsx          # React entry point
+```
+
+## Stats
+
+- **Bundle:** 63KB gzip (budget: 200KB)
+- **Tests:** 194+ passing
+- **Accessibility:** WCAG AA compliant (contrast ≥4.5:1)
+- **Lighthouse:** FCP <1.5s
+
+## License
+
+Private project.
